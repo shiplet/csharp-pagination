@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 using ListExtensions;
 
 namespace csharp
@@ -9,9 +10,16 @@ namespace csharp
     {
         static void Main(string[] args)
         {
-            var x = Enumerable.Range(0, 2500).ToList();
+            var x = Enumerable.Range(0, 20128).ToList();
             var y = x.Paginate(2000);
-            y.ForEach(c => {c.ForEach(d => Console.WriteLine(d)); Console.WriteLine("--------");});
+            var z = y.Select((item, i) => new {item, i})
+            .Select(b => {
+                if (b.i != 0) {
+                    Thread.Sleep(100);
+                }
+                return b.item;
+            }).ToList();
+
         }
     }
 }
